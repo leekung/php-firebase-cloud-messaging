@@ -4,6 +4,7 @@ namespace sngrl\PhpFirebaseCloudMessaging;
 use sngrl\PhpFirebaseCloudMessaging\Recipient\Recipient;
 use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 use sngrl\PhpFirebaseCloudMessaging\Recipient\Device;
+use sngrl\PhpFirebaseCloudMessaging\Recipient\Condition;
 
 /**
  * @author sngrl
@@ -158,8 +159,10 @@ class Message implements \JsonSerializable
 
         if(is_array($target)){
             $jsonData['registration_ids'] = $target;
-        } else {
+        } else if ($this->recipientType == Device::class) {
             $jsonData['to'] = $target;
+        } else if ($this->recipientType == Condition::class) {
+            $jsonData['condition'] = $target;
         }
 
         if ($this->collapseKey) {
@@ -202,6 +205,10 @@ class Message implements \JsonSerializable
                     }, $this->recipients);
                 }
 
+                break;
+            case Condition::class:
+
+                return current($this->recipients)->getCondition();
                 break;
             default:
                 throw new \UnexpectedValueException('PhpFirebaseCloudMessaging only supports single topic and single device messages yet');
