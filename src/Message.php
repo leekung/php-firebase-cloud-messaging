@@ -26,6 +26,24 @@ class Message implements \JsonSerializable
     }
 
     /**
+     * get Recipient
+     */
+    public function getRecipient()
+    {
+
+        return $this->recipients;
+    }
+
+    /**
+     * clear Recipient
+     */
+    public function clearRecipient()
+    {
+
+        return $this->recipients = [];
+    }
+
+    /**
      * where should the message go
      *
      * @param Recipient $recipient
